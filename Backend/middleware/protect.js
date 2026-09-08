@@ -1,0 +1,44 @@
+const jwt = require('jsonwebtoken')
+
+const protect = (req, res, next) => {
+    const token = req.cookies.token
+    if(!token) {
+        return res.status(401).json({message: 'Not authorized, no token'})
+    }
+
+    try {
+        const decode = jwt.verify(token, process.env.JWT_SECRET)
+        req.user = decode
+        next()
+    } catch (error) {
+        return res.status(401).json({message: 'Not authorized, token failed'})
+    }
+}
+
+module.exports = protect
+
+// const jwt = require('jsonwebtoken')
+
+// const protect = (req, res, next) => {
+//     const token = req.cookies.token
+
+//     if (!token) {
+//         return res.status(401).json({
+//             message: 'Not authorized, no token'
+//         })
+//     }
+
+//     try {
+//         const decode = jwt.verify(token, process.env.JWT_SECRET)
+//         req.user = decode
+//         next()
+//     } catch (error) {
+//         console.log("JWT ERROR:", error.message)
+
+//         return res.status(401).json({
+//             message: 'Not authorized, token failed'
+//         })
+//     }
+// }
+
+// module.exports = protect
