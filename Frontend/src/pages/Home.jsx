@@ -6,10 +6,12 @@ import AddNoteModal from "../components/AddNoteModal"
 import EditNoteModal from "../pages/EditNoteModal"
 import NoteDetailsModal from "../components/NoteDetailsModal"
 import Navbar from "../components/Navbar"
+import { useApp } from "../context/AppContext"
 import { LuPlus, LuSearch, LuLock, LuLayoutGrid, LuList, LuCornerDownLeft, LuX } from "react-icons/lu"
 import { AnimatePresence, motion } from "framer-motion"
 
 const Home = () => {
+  const { t, lang } = useApp()
   const [notes, setNotes] = useState([])
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState("all") // all, public, private
@@ -118,7 +120,7 @@ const Home = () => {
   const filteredNotes = notes
     .filter((note) => {
       if (activeTab === "pinned") return note.isPinned
-      if (activeTab === "trash") return false // active trash mock empty or deleted
+      if (activeTab === "trash") return false
       return true
     })
     .filter((note) => {
@@ -145,7 +147,7 @@ const Home = () => {
   const storageUsedMB = (totalChars / 1024 / 100).toFixed(1)
 
   return (
-    <div className="min-h-screen bg-[#f8f9fc] flex flex-col justify-between font-sans">
+    <div className="min-h-screen bg-[#f8f9fc] dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col justify-between font-sans transition-colors">
       <div>
         <Navbar notesCount={totalCount} activeTab={activeTab} onTabChange={setActiveTab} />
 
@@ -153,78 +155,78 @@ const Home = () => {
           {/* Workspace Header & Title Bar */}
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
             <div>
-              <div className="flex items-center gap-2 text-xs font-semibold text-slate-400 tracking-wider uppercase mb-1">
-                <span>WORKSPACE</span>
+              <div className="flex items-center gap-2 text-xs font-semibold text-slate-400 dark:text-slate-500 tracking-wider uppercase mb-1">
+                <span>{t("workspace")}</span>
                 <span>/</span>
-                <span className="text-slate-600">Dashboard</span>
+                <span className="text-slate-600 dark:text-slate-400">{t("dashboardSub")}</span>
               </div>
-              <h1 className="text-3xl font-bold text-slate-900 tracking-tight">My Notes</h1>
-              <p className="text-slate-500 text-sm mt-1">
-                Organize, draft, and publish your personal or shared thoughts.
+              <h1 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">{t("myNotes")}</h1>
+              <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">
+                {t("myNotesSub")}
               </p>
             </div>
 
             {/* Right Controls: Search & Add Note */}
             <div className="flex items-center gap-3">
               <div className="relative flex-1 sm:w-80">
-                <LuSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={17} />
+                <LuSearch className={`absolute top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 ${lang === 'ar' ? 'right-3.5' : 'left-3.5'}`} size={17} />
                 <input
                   ref={searchInputRef}
                   type="text"
-                  placeholder="Search notes by title or body..."
+                  placeholder={t("searchPlaceholder")}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-12 py-2.5 bg-white border border-slate-200/80 rounded-xl text-xs font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:border-slate-400 focus:ring-1 focus:ring-slate-400 shadow-sm transition-all"
+                  className={`w-full ${lang === 'ar' ? 'pr-10 pl-12' : 'pl-10 pr-12'} py-2.5 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-xl text-xs font-medium text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-slate-400 dark:focus:border-slate-600 shadow-xs transition-all`}
                 />
-                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-mono text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">
+                <span className={`absolute top-1/2 -translate-y-1/2 text-[10px] font-mono text-slate-400 dark:text-slate-500 bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded border border-slate-200 dark:border-slate-700 ${lang === 'ar' ? 'left-3' : 'right-3'}`}>
                   ⌘K
                 </span>
               </div>
 
               <button
                 onClick={() => setIsModalOpen(true)}
-                className="bg-slate-950 hover:bg-slate-800 text-white rounded-xl px-4 py-2.5 flex items-center gap-2 text-xs font-semibold shadow-sm transition-all cursor-pointer shrink-0"
+                className="bg-slate-950 dark:bg-white dark:text-slate-950 hover:bg-slate-800 dark:hover:bg-slate-100 text-white rounded-xl px-4 py-2.5 flex items-center gap-2 text-xs font-semibold shadow-xs transition-all cursor-pointer shrink-0"
               >
                 <LuPlus size={16} />
-                <span>Add Note</span>
+                <span>{t("addNote")}</span>
               </button>
             </div>
           </div>
 
           {/* 4 Metrics Stats Bar (Image 2) */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-            <div className="bg-white rounded-2xl border border-slate-100 p-5 shadow-xs flex flex-col justify-between">
-              <div className="flex items-center justify-between text-[11px] font-bold text-slate-400 tracking-wider uppercase mb-3">
-                <span>TOTAL STORED</span>
-                <span className="bg-emerald-50 text-emerald-600 font-semibold px-2 py-0.5 rounded-full text-[10px]">
-                  +2 this wk
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 p-5 shadow-xs flex flex-col justify-between transition-colors">
+              <div className="flex items-center justify-between text-[11px] font-bold text-slate-400 dark:text-slate-500 tracking-wider uppercase mb-3">
+                <span>{t("totalStored")}</span>
+                <span className="bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 font-semibold px-2 py-0.5 rounded-full text-[10px]">
+                  {t("thisWkTag")}
                 </span>
               </div>
-              <p className="text-3xl font-bold text-slate-900">{totalCount}</p>
+              <p className="text-3xl font-bold text-slate-900 dark:text-white">{totalCount}</p>
             </div>
 
-            <div className="bg-white rounded-2xl border border-slate-100 p-5 shadow-xs flex flex-col justify-between">
-              <div className="flex items-center justify-between text-[11px] font-bold text-slate-400 tracking-wider uppercase mb-3">
-                <span>PUBLISHED</span>
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 p-5 shadow-xs flex flex-col justify-between transition-colors">
+              <div className="flex items-center justify-between text-[11px] font-bold text-slate-400 dark:text-slate-500 tracking-wider uppercase mb-3">
+                <span>{t("published")}</span>
                 <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
               </div>
-              <p className="text-3xl font-bold text-slate-900">{publicCount}</p>
+              <p className="text-3xl font-bold text-slate-900 dark:text-white">{publicCount}</p>
             </div>
 
-            <div className="bg-white rounded-2xl border border-slate-100 p-5 shadow-xs flex flex-col justify-between">
-              <div className="flex items-center justify-between text-[11px] font-bold text-slate-400 tracking-wider uppercase mb-3">
-                <span>ENCRYPTED PRIVATE</span>
-                <LuLock className="text-slate-400" size={15} />
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 p-5 shadow-xs flex flex-col justify-between transition-colors">
+              <div className="flex items-center justify-between text-[11px] font-bold text-slate-400 dark:text-slate-500 tracking-wider uppercase mb-3">
+                <span>{t("encryptedPrivate")}</span>
+                <LuLock className="text-slate-400 dark:text-slate-500" size={15} />
               </div>
-              <p className="text-3xl font-bold text-slate-900">{privateCount}</p>
+              <p className="text-3xl font-bold text-slate-900 dark:text-white">{privateCount}</p>
             </div>
 
-            <div className="bg-white rounded-2xl border border-slate-100 p-5 shadow-xs flex flex-col justify-between">
-              <div className="flex items-center justify-between text-[11px] font-bold text-slate-400 tracking-wider uppercase mb-3">
-                <span>STORAGE USED</span>
-                <span className="text-slate-400 font-mono text-[10px]">0.14%</span>
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 p-5 shadow-xs flex flex-col justify-between transition-colors">
+              <div className="flex items-center justify-between text-[11px] font-bold text-slate-400 dark:text-slate-500 tracking-wider uppercase mb-3">
+                <span>{t("storageUsed")}</span>
+                <span className="text-slate-400 dark:text-slate-500 font-mono text-[10px]">0.14%</span>
               </div>
-              <p className="text-3xl font-bold text-slate-900">{storageUsedMB > 0 ? storageUsedMB : 1.4} MB</p>
+              <p className="text-3xl font-bold text-slate-900 dark:text-white">{storageUsedMB > 0 ? storageUsedMB : 1.4} MB</p>
             </div>
           </div>
 
@@ -236,12 +238,12 @@ const Home = () => {
                 onClick={() => setFilter("all")}
                 className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center gap-2 ${
                   filter === "all"
-                    ? "bg-slate-950 text-white shadow-xs"
-                    : "bg-white text-slate-600 border border-slate-200/80 hover:bg-slate-50"
+                    ? "bg-slate-950 dark:bg-white text-white dark:text-slate-950 shadow-xs"
+                    : "bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200/80 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800"
                 }`}
               >
-                <span>All Notes</span>
-                <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${filter === "all" ? "bg-slate-800 text-white" : "bg-slate-100 text-slate-600"}`}>
+                <span>{t("allNotes")}</span>
+                <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${filter === "all" ? "bg-slate-800 dark:bg-slate-200 text-white dark:text-slate-900" : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400"}`}>
                   {totalCount}
                 </span>
               </button>
@@ -250,13 +252,13 @@ const Home = () => {
                 onClick={() => setFilter("public")}
                 className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center gap-2 ${
                   filter === "public"
-                    ? "bg-slate-950 text-white shadow-xs"
-                    : "bg-white text-slate-600 border border-slate-200/80 hover:bg-slate-50"
+                    ? "bg-slate-950 dark:bg-white text-white dark:text-slate-950 shadow-xs"
+                    : "bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200/80 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800"
                 }`}
               >
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                <span>Public</span>
-                <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${filter === "public" ? "bg-slate-800 text-white" : "bg-slate-100 text-slate-600"}`}>
+                <span>{t("publicTag")}</span>
+                <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${filter === "public" ? "bg-slate-800 dark:bg-slate-200 text-white dark:text-slate-900" : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400"}`}>
                   {publicCount}
                 </span>
               </button>
@@ -265,13 +267,13 @@ const Home = () => {
                 onClick={() => setFilter("private")}
                 className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center gap-2 ${
                   filter === "private"
-                    ? "bg-slate-950 text-white shadow-xs"
-                    : "bg-white text-slate-600 border border-slate-200/80 hover:bg-slate-50"
+                    ? "bg-slate-950 dark:bg-white text-white dark:text-slate-950 shadow-xs"
+                    : "bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200/80 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800"
                 }`}
               >
-                <LuLock size={13} className={filter === "private" ? "text-white" : "text-slate-400"} />
-                <span>Private</span>
-                <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${filter === "private" ? "bg-slate-800 text-white" : "bg-slate-100 text-slate-600"}`}>
+                <LuLock size={13} className={filter === "private" ? "text-white dark:text-slate-950" : "text-slate-400 dark:text-slate-500"} />
+                <span>{t("privateTag")}</span>
+                <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${filter === "private" ? "bg-slate-800 dark:bg-slate-200 text-white dark:text-slate-900" : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400"}`}>
                   {privateCount}
                 </span>
               </button>
@@ -279,27 +281,27 @@ const Home = () => {
 
             {/* Right Controls: Sort & Layout Toggle */}
             <div className="flex items-center gap-3">
-              <div className="flex items-center gap-2 text-xs text-slate-500 font-medium">
-                <span>Sort:</span>
+              <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 font-medium">
+                <span>{t("sort")}</span>
                 <select
                   value={sortOption}
                   onChange={(e) => setSortOption(e.target.value)}
-                  className="bg-white border border-slate-200 rounded-lg px-2.5 py-1 text-xs font-semibold text-slate-800 focus:outline-none cursor-pointer"
+                  className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg px-2.5 py-1 text-xs font-semibold text-slate-800 dark:text-slate-200 focus:outline-none cursor-pointer"
                 >
-                  <option value="newest">Newest first</option>
-                  <option value="oldest">Oldest first</option>
-                  <option value="title">Title A-Z</option>
+                  <option value="newest">{t("newestFirst")}</option>
+                  <option value="oldest">{t("oldestFirst")}</option>
+                  <option value="title">{t("titleAZ")}</option>
                 </select>
               </div>
 
-              <span className="h-4 w-[1px] bg-slate-200"></span>
+              <span className="h-4 w-[1px] bg-slate-200 dark:bg-slate-800"></span>
 
-              <div className="flex items-center bg-white border border-slate-200 rounded-lg p-0.5">
+              <div className="flex items-center bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-0.5">
                 <button
                   onClick={() => setViewMode("grid")}
                   title="Grid View"
                   className={`p-1.5 rounded-md transition-colors cursor-pointer ${
-                    viewMode === "grid" ? "bg-slate-100 text-slate-900" : "text-slate-400 hover:text-slate-700"
+                    viewMode === "grid" ? "bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white" : "text-slate-400 hover:text-slate-700 dark:hover:text-slate-200"
                   }`}
                 >
                   <LuLayoutGrid size={15} />
@@ -308,7 +310,7 @@ const Home = () => {
                   onClick={() => setViewMode("list")}
                   title="List View"
                   className={`p-1.5 rounded-md transition-colors cursor-pointer ${
-                    viewMode === "list" ? "bg-slate-100 text-slate-900" : "text-slate-400 hover:text-slate-700"
+                    viewMode === "list" ? "bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white" : "text-slate-400 hover:text-slate-700 dark:hover:text-slate-200"
                   }`}
                 >
                   <LuList size={15} />
@@ -319,22 +321,22 @@ const Home = () => {
 
           {/* Quick Draft Input Box (Image 2) */}
           <form onSubmit={handleQuickDraftSubmit} className="relative mb-8">
-            <div className="bg-white border border-slate-200/90 rounded-2xl p-2.5 pl-4 flex items-center gap-3 shadow-xs hover:border-slate-300 transition-all">
+            <div className="bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-2xl p-2.5 px-4 flex items-center gap-3 shadow-xs hover:border-slate-300 dark:hover:border-slate-700 transition-all">
               <span className="text-slate-400 text-base">⚡</span>
               <input
                 type="text"
-                placeholder="Quick draft a thought or press Enter to create..."
+                placeholder={t("quickDraftPlaceholder")}
                 value={quickDraft}
                 onChange={(e) => setQuickDraft(e.target.value)}
                 disabled={quickDrafting}
-                className="w-full text-xs font-medium text-slate-800 placeholder-slate-400 bg-transparent focus:outline-none"
+                className="w-full text-xs font-medium text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 bg-transparent focus:outline-none"
               />
               <button
                 type="submit"
                 disabled={!quickDraft.trim() || quickDrafting}
-                className="bg-slate-100 hover:bg-slate-200 text-slate-600 px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors disabled:opacity-40 cursor-pointer shrink-0"
+                className="bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors disabled:opacity-40 cursor-pointer shrink-0"
               >
-                <span>Return</span>
+                <span>{t("return")}</span>
                 <LuCornerDownLeft size={13} />
               </button>
             </div>
@@ -342,12 +344,12 @@ const Home = () => {
 
           {/* Notes Container */}
           {loading ? (
-            <div className="py-16 text-center text-slate-400 text-xs">Loading your notes...</div>
+            <div className="py-16 text-center text-slate-400 dark:text-slate-500 text-xs">{t("loadingNotes")}</div>
           ) : filteredNotes.length === 0 ? (
-            <div className="bg-white rounded-2xl border border-slate-100 p-12 text-center my-4">
-              <p className="text-slate-500 font-medium text-sm mb-1">No notes found</p>
-              <p className="text-slate-400 text-xs">
-                {searchQuery ? "Try matching a different title or keyword." : "Create your first note above to get started."}
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 p-12 text-center my-4 transition-colors">
+              <p className="text-slate-500 dark:text-slate-400 font-medium text-sm mb-1">{t("noNotesFound")}</p>
+              <p className="text-slate-400 dark:text-slate-500 text-xs">
+                {searchQuery ? "Try matching a different title or keyword." : t("noNotesSub")}
               </p>
             </div>
           ) : (
@@ -376,35 +378,35 @@ const Home = () => {
       </div>
 
       {/* Footer / Status Bar (Image 2) */}
-      <footer className="w-full bg-white border-t border-slate-100 py-4 px-6 mt-12">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-medium text-slate-500">
+      <footer className="w-full bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 py-4 px-6 mt-12 transition-colors">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-medium text-slate-500 dark:text-slate-400">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span>Cloud sync active</span>
+            <span>{t("cloudSync")}</span>
             <span>•</span>
-            <span className="text-slate-400">All changes saved locally</span>
+            <span className="text-slate-400 dark:text-slate-500">{t("savedLocally")}</span>
           </div>
 
           <div className="flex items-center gap-5">
             <button
               onClick={handleExportMarkdown}
-              className="hover:text-slate-900 transition-colors cursor-pointer"
+              className="hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer"
             >
-              Export Markdown
+              {t("exportMarkdown")}
             </button>
             <span>•</span>
             <button
               onClick={() => setShowShortcutsModal(true)}
-              className="hover:text-slate-900 transition-colors cursor-pointer"
+              className="hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer"
             >
-              Keyboard Shortcuts
+              {t("shortcuts")}
             </button>
             <span>•</span>
             <button
               onClick={() => navigate("/profile")}
-              className="hover:text-slate-900 transition-colors cursor-pointer"
+              className="hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer"
             >
-              Storage Settings
+              {t("storageSettings")}
             </button>
           </div>
         </div>
@@ -425,27 +427,27 @@ const Home = () => {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               onClick={(e) => e.stopPropagation()}
-              className="bg-white rounded-2xl p-6 w-full max-w-sm border border-slate-100 shadow-xl"
+              className="bg-white dark:bg-slate-900 rounded-2xl p-6 w-full max-w-sm border border-slate-100 dark:border-slate-800 shadow-xl"
             >
               <div className="flex justify-between items-center mb-4">
-                <h2 className="font-bold text-base text-slate-900">Keyboard Shortcuts</h2>
-                <button onClick={() => setShowShortcutsModal(false)} className="text-slate-400 hover:text-slate-700 cursor-pointer">
+                <h2 className="font-bold text-base text-slate-900 dark:text-white">{t("shortcuts")}</h2>
+                <button onClick={() => setShowShortcutsModal(false)} className="text-slate-400 hover:text-slate-700 dark:hover:text-white cursor-pointer">
                   <LuX size={18} />
                 </button>
               </div>
 
-              <div className="space-y-3 text-xs text-slate-700">
-                <div className="flex justify-between items-center p-2 bg-slate-50 rounded-xl">
+              <div className="space-y-3 text-xs text-slate-700 dark:text-slate-300">
+                <div className="flex justify-between items-center p-2 bg-slate-50 dark:bg-slate-800 rounded-xl">
                   <span>Search Notes</span>
-                  <span className="font-mono bg-white px-2 py-0.5 rounded border border-slate-200">⌘K</span>
+                  <span className="font-mono bg-white dark:bg-slate-900 px-2 py-0.5 rounded border border-slate-200 dark:border-slate-700">⌘K</span>
                 </div>
-                <div className="flex justify-between items-center p-2 bg-slate-50 rounded-xl">
+                <div className="flex justify-between items-center p-2 bg-slate-50 dark:bg-slate-800 rounded-xl">
                   <span>Go to Dashboard</span>
-                  <span className="font-mono bg-white px-2 py-0.5 rounded border border-slate-200">⌘D</span>
+                  <span className="font-mono bg-white dark:bg-slate-900 px-2 py-0.5 rounded border border-slate-200 dark:border-slate-700">⌘D</span>
                 </div>
-                <div className="flex justify-between items-center p-2 bg-slate-50 rounded-xl">
+                <div className="flex justify-between items-center p-2 bg-slate-50 dark:bg-slate-800 rounded-xl">
                   <span>Submit Quick Draft</span>
-                  <span className="font-mono bg-white px-2 py-0.5 rounded border border-slate-200">Enter ↵</span>
+                  <span className="font-mono bg-white dark:bg-slate-900 px-2 py-0.5 rounded border border-slate-200 dark:border-slate-700">Enter ↵</span>
                 </div>
               </div>
             </motion.div>
@@ -460,4 +462,4 @@ const Home = () => {
   )
 }
 
-export default Home
+export default Home

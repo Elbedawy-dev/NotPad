@@ -1,6 +1,18 @@
 const Note = require('../models/Note')
 const cloudinary = require('../config/cloudinary')
 
+const uploadToCloudinary = async (file, folder) => {
+    if (!file) return null;
+    const dataURI = `data:${file.mimetype};base64,${file.buffer.toString('base64')}`;
+    try {
+        const result = await cloudinary.uploader.upload(dataURI, { folder });
+        return result.secure_url;
+    } catch (err) {
+        console.error("Cloudinary upload failed, using data URI fallback:", err.message);
+        return dataURI;
+    }
+};
+
 const addNote = async (req, res) => {
     try {
         const { title, body, isPublic, image } = req.body;
@@ -11,13 +23,7 @@ const addNote = async (req, res) => {
 
         let imageUrl = image || null;
         if (req.file) {
-            try {
-                const result = await cloudinary.uploader.upload(req.file.path, { folder: "notpad_notes" })
-                imageUrl = result.secure_url
-            } catch (err) {
-                console.error("Cloudinary upload failed, using local file:", err.message)
-                imageUrl = `http://localhost:5000/uploads/${req.file.filename}`
-            }
+            imageUrl = await uploadToCloudinary(req.file, "notpad_notes")
         }
 
         const newNote = await Note.create({
@@ -68,13 +74,7 @@ const updateNote = async (req, res) => {
         }
 
         if (req.file) {
-            try {
-                const result = await cloudinary.uploader.upload(req.file.path, { folder: "notpad_notes" })
-                note.image = result.secure_url
-            } catch (err) {
-                console.error("Cloudinary upload failed, using local file:", err.message)
-                note.image = `http://localhost:5000/uploads/${req.file.filename}`
-            }
+            note.image = await uploadToCloudinary(req.file, "notpad_notes")
         }
 
         await note.save();
@@ -135,14 +135,7 @@ const uploadNoteImage = async (req, res) => {
             return res.status(400).json({ message: "No file uploaded" })
         }
 
-        let imageUrl;
-        try {
-            const result = await cloudinary.uploader.upload(req.file.path, { folder: "notpad_notes" })
-            imageUrl = result.secure_url
-        } catch (err) {
-            console.error("Cloudinary upload error, using local file:", err.message)
-            imageUrl = `http://localhost:5000/uploads/${req.file.filename}`
-        }
+        const imageUrl = await uploadToCloudinary(req.file, "notpad_notes")
 
         const note = await Note.findById(req.params.noteId)
 
@@ -160,4 +153,5 @@ const uploadNoteImage = async (req, res) => {
     }
 }
 
-module.exports = { addNote, getNotes, updateNote, deleteNote, uploadNoteImage, togglePin };
+module.exports = { addNote, getNotes, updateNote, deleteNote, uploadNoteImage, togglePin };
+

@@ -122,12 +122,13 @@ const uploadAvatarFile = async (req, res) => {
             return res.status(400).json({ message: "No file uploaded" });
         }
         let avatarUrl;
+        const dataURI = `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`;
         try {
-            const result = await cloudinary.uploader.upload(req.file.path, { folder: "notpad_avatars" })
+            const result = await cloudinary.uploader.upload(dataURI, { folder: "notpad_avatars" })
             avatarUrl = result.secure_url
         } catch (err) {
-            console.error("Cloudinary upload failed, using local file:", err.message)
-            avatarUrl = `http://localhost:5000/uploads/${req.file.filename}`
+            console.error("Cloudinary upload failed, using data URI fallback:", err.message)
+            avatarUrl = dataURI
         }
 
         const user = await User.findByIdAndUpdate(req.user.id, { avatar: avatarUrl }, { new: true }).select('-password')
@@ -166,4 +167,4 @@ const deleteAccount = async (req, res) => {
     }
 }
 
-module.exports = { register, Login, logout, getMe, updateAvatar, uploadAvatarFile, updateProfile, deleteAccount }
+module.exports = { register, Login, logout, getMe, updateAvatar, uploadAvatarFile, updateProfile, deleteAccount }

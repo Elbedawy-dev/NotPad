@@ -3,15 +3,15 @@ const express = require("express");
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
-
 const path = require('path');
+
 const app = express();
 
 const authRoutes = require('./routes/authRoutes');
 const noteRouter = require('./routes/noteRouter');
 
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: true,
     credentials: true
 }));
 
@@ -19,24 +19,36 @@ app.use(cookieParser());
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-app.use('/api/auth', authRoutes);
-app.use('/api/notes', noteRouter);
-
-
-const startServer = async () => {
+// Middleware to ensure MongoDB connection in serverless environment
+let isConnected = false;
+const connectDB = async () => {
+    if (isConnected && mongoose.connection.readyState === 1) return;
     try {
-        await mongoose.connect(process.env.MONGO_URI);
-
-        console.log('mongoDB server started');
-
-        app.listen(process.env.PORT, () => {
-            console.log(`server is running on port: ${process.env.PORT}`);
-        });
-
+        const db = await mongoose.connect(process.env.MONGO_URI);
+        isConnected = db.connections[0].readyState === 1;
+        console.log('MongoDB connected successfully');
     } catch (error) {
-        console.error('Connection failed', error.message);
-        process.exit(1);
+        console.error('MongoDB Connection Error:', error.message);
     }
 };
 
-startServer();
+app.use(async (req, res, next) => {
+    await connectDB();
+    next();
+});
+
+app.get('/', (req, res) => {
+    res.json({ status: "OK", message: "NotPad API Server Operating" });
+});
+
+app.use('/api/auth', authRoutes);
+app.use('/api/notes', noteRouter);
+
+if (require.main === module) {
+    const PORT = process.env.PORT || 5000;
+    app.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
+    });
+}
+
+module.exports = app;
