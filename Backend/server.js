@@ -11,9 +11,9 @@ const authRoutes = require('./routes/authRoutes');
 const noteRouter = require('./routes/noteRouter');
 
 app.use(cors({
-    origin: true,
-    credentials: true
-}));
+  origin: ['http://localhost:5173', 'https://notpad-flow.vercel.app'],
+  credentials: true
+}))
 
 app.use(cookieParser());
 app.use(express.json());
@@ -51,4 +51,4 @@ if (require.main === module) {
     });
 }
 
-module.exports = app;
+module.exports = app;
