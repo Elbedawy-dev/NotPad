@@ -1,5 +1,4 @@
-import {useState, useEffect} from "react";
-import { createContext } from "react";
+import { useState, useEffect, createContext } from "react";
 import api from "../api/axios";
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -32,12 +31,23 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
+  const updateProfile = async ({ name, avatar }) => {
+    const res = await api.put("/auth/profile", { name, avatar });
+    setUser(res.data);
+    return res.data;
+  };
 
-return (
-    <AuthContext.Provider value={{ user, register, Login, logout, loading }}>
+  const deleteAccount = async () => {
+    await api.delete("/auth/me");
+    setUser(null);
+  };
+
+  return (
+    <AuthContext.Provider value={{ user, setUser, register, Login, logout, updateProfile, deleteAccount, loading }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
 export default AuthProvider;
+

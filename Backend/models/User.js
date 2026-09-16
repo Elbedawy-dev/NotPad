@@ -16,8 +16,12 @@ email: {
 password: {
     type: String,
     required: true
-}
+},
 
+avatar: {
+    type: String,
+    default: "/avatars/1.png"
+}
 
 }, {timestamps: true})
 

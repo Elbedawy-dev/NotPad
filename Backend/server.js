@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 
+const path = require('path');
 const app = express();
 
 const authRoutes = require('./routes/authRoutes');
@@ -16,9 +17,11 @@ app.use(cors({
 
 app.use(cookieParser());
 app.use(express.json());
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use('/api/auth', authRoutes);
 app.use('/api/notes', noteRouter);
+
 
 const startServer = async () => {
     try {

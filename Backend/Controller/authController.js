@@ -1,4 +1,5 @@
 const User = require('../models/User')
+const Note = require('../models/Note')
 const bcrypt = require('bcrypt')
 const generateToken = require('../utils/generateToken')
 
@@ -32,7 +33,9 @@ const register = async (req, res) => {
         return res.status(201).json({
             _id: newUser._id,
             name: newUser.name,
-            email: newUser.email
+            email: newUser.email,
+            avatar: newUser.avatar,
+            createdAt: newUser.createdAt
         });
 
     } catch (error) {
@@ -68,7 +71,9 @@ const Login = async(req, res) => {
         return res.status(200).json({
             _id: loginUser._id,
             name: loginUser.name,
-            email: loginUser.email
+            email: loginUser.email,
+            avatar: loginUser.avatar,
+            createdAt: loginUser.createdAt
         });
     } catch (error) {
        return res.status(500).json({message: error.message})
@@ -99,4 +104,66 @@ const getMe = async (req, res) => {
     }
 }
 
-module.exports = {register, Login, logout, getMe}
+const cloudinary = require('../config/cloudinary')
+
+const updateAvatar = async (req, res) => {
+    try {
+        const { avatar } = req.body
+        const user = await User.findByIdAndUpdate(req.user.id, { avatar }, { new: true }).select('-password')
+        return res.status(200).json(user)
+    } catch (error) {
+        return res.status(500).json({ message: error.message })
+    }
+}
+
+const uploadAvatarFile = async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ message: "No file uploaded" });
+        }
+        let avatarUrl;
+        try {
+            const result = await cloudinary.uploader.upload(req.file.path, { folder: "notpad_avatars" })
+            avatarUrl = result.secure_url
+        } catch (err) {
+            console.error("Cloudinary upload failed, using local file:", err.message)
+            avatarUrl = `http://localhost:5000/uploads/${req.file.filename}`
+        }
+
+        const user = await User.findByIdAndUpdate(req.user.id, { avatar: avatarUrl }, { new: true }).select('-password')
+        return res.status(200).json(user)
+    } catch (error) {
+        return res.status(500).json({ message: error.message })
+    }
+}
+
+const updateProfile = async (req, res) => {
+    try {
+        const { name, avatar } = req.body
+        const updateFields = {}
+        if (name !== undefined) updateFields.name = name
+        if (avatar !== undefined) updateFields.avatar = avatar
+
+        const user = await User.findByIdAndUpdate(req.user.id, updateFields, { new: true }).select('-password')
+        return res.status(200).json(user)
+    } catch (error) {
+        return res.status(500).json({ message: error.message })
+    }
+}
+
+const deleteAccount = async (req, res) => {
+    try {
+        await Note.deleteMany({ user: req.user.id })
+        await User.findByIdAndDelete(req.user.id)
+        res.clearCookie('token', {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax'
+        });
+        return res.status(200).json({ message: 'Account and associated notes deleted successfully' })
+    } catch (error) {
+        return res.status(500).json({ message: error.message })
+    }
+}
+
+module.exports = { register, Login, logout, getMe, updateAvatar, uploadAvatarFile, updateProfile, deleteAccount }
