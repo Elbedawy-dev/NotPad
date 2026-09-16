@@ -131,22 +131,30 @@ const deleteNote = async (req, res) => {
 
 const uploadNoteImage = async (req, res) => {
     try {
-        if (!req.file) {
-            return res.status(400).json({ message: "No file uploaded" })
+        const streamUpload = () => {
+            return new Promise((resolve, reject) => {
+                const stream = cloudinary.uploader.upload_stream(
+                    (error, result) => {
+                        if (result) resolve(result)
+                        else reject(error)
+                    }
+                )
+                stream.end(req.file.buffer)
+            })
         }
 
-        const imageUrl = await uploadToCloudinary(req.file, "notpad_notes")
+        const result = await streamUpload()
 
         const note = await Note.findById(req.params.noteId)
 
         if (!note) {
-            return res.status(404).json({ message: "Note not found" })
+            return res.status(404).json({ message: 'Note not found' })
         }
 
-        note.image = imageUrl
+        note.image = result.secure_url
         await note.save()
 
-        return res.status(200).json({ message: "Image uploaded successfully", note })
+        return res.status(200).json({ message: 'Image uploaded successfully', note })
 
     } catch (error) {
         return res.status(500).json({ message: error.message })
@@ -154,4 +162,4 @@ const uploadNoteImage = async (req, res) => {
 }
 
 module.exports = { addNote, getNotes, updateNote, deleteNote, uploadNoteImage, togglePin };
-
+
