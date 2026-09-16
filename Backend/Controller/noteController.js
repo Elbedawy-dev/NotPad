@@ -1,4 +1,5 @@
 const Note = require('../models/Note')
+const cloudinary = require('../config/cloudinary')
 
 const addNote = async (req, res) => {
 
@@ -62,6 +63,28 @@ const updateNote = async(req, res) => {
     }
 }
 
+const togglePin = async (req, res) => {
+    try {
+        const note = await Note.findById(req.params.noteId);
+        
+        if (!note) {
+            return res.status(404).json({ message: 'Note not found' });
+        }
+        
+        if (note.user.toString() !== req.user.id) {
+            return res.status(403).json({ message: 'Not authorized' });
+        }
+        
+        note.isPinned = !note.isPinned
+        await note.save();
+
+    return res.status(200).json({ message: note.isPinned ? 'Note pinned' : 'Note unpinned', note })
+
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+}
+
 const deleteNote = async(req, res) => {
     try {
         const note = await Note.findById(req.params.noteId);
@@ -83,4 +106,24 @@ const deleteNote = async(req, res) => {
     }
 }
 
-module.exports = { addNote, getNotes, updateNote, deleteNote };
+const uploadNoteImage = async (req, res) => {
+    try {
+        const result = await cloudinary.uploader.upload(req.file.path)
+        
+        const note = await Note.findById(req.params.noteId)
+
+        if(!note ) {
+           return res.status(404).json({message: "Note not found"})
+        }
+
+           note.image = result.secure_url
+           await note.save()
+
+           return res.status(200).json({message: "Image uploaded successfully", note })
+        
+    } catch (error) {
+        return res.status(500).json({ message: error.message })
+    }
+}
+
+module.exports = { addNote, getNotes, updateNote, deleteNote, uploadNoteImage, togglePin };

@@ -20,8 +20,18 @@ body: {
 isPublic: {
     type: Boolean,
     default: false
+},
+
+isPinned: {
+    type: Boolean,
+    default: false
+},
+
+image: {
+    type: String,
+    default: null
 }
 
 }, {timestamps: true})
 
-module.exports = mongoose.model('notes', noteSchema)
+module.exports = mongoose.model('Note', noteSchema)
