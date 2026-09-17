@@ -9,25 +9,40 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // If we have a token in localStorage, fetch the current user to restore session
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setLoading(false);
+      return;
+    }
     api
       .get("/auth/me")
       .then((res) => setUser(res.data))
-      .catch(() => setUser(null))
+      .catch(() => {
+        // Token expired or invalid — clear it
+        localStorage.removeItem("token");
+        setUser(null);
+      })
       .finally(() => setLoading(false));
   }, []);
 
   const register = async (name, email, password) => {
     const res = await api.post("/auth/register", { name, email, password });
-    setUser(res.data);
+    if (res.data.token) localStorage.setItem("token", res.data.token);
+    const { token: _t, ...userData } = res.data;
+    setUser(userData);
   };
 
   const Login = async (email, password) => {
     const res = await api.post("/auth/login", { email, password });
-    setUser(res.data);
+    if (res.data.token) localStorage.setItem("token", res.data.token);
+    const { token: _t, ...userData } = res.data;
+    setUser(userData);
   };
 
   const logout = async () => {
     await api.post("/auth/logout");
+    localStorage.removeItem("token");
     setUser(null);
   };
 
@@ -39,6 +54,7 @@ export const AuthProvider = ({ children }) => {
 
   const deleteAccount = async () => {
     await api.delete("/auth/me");
+    localStorage.removeItem("token");
     setUser(null);
   };
 
@@ -50,4 +66,3 @@ export const AuthProvider = ({ children }) => {
 };
 
 export default AuthProvider;
-

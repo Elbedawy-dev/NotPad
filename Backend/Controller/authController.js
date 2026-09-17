@@ -27,10 +27,12 @@ const register = async (req, res) => {
             httpOnly: true,
             secure: true,
             sameSite: 'none',
+            path: '/',
             maxAge: 7 * 24 * 60 * 60 * 1000
         });
 
         return res.status(201).json({
+            token,
             _id: newUser._id,
             name: newUser.name,
             email: newUser.email,
@@ -61,17 +63,19 @@ const Login = async(req, res) => {
         } 
 
         const token = generateToken(loginUser._id)
-        res.cookie('token', token, { 
+        res.cookie('token', token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'lax',
+            secure: true,
+            sameSite: 'none',
+            path: '/',
             maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
-        }) 
+        })
 
         return res.status(200).json({
-            _id: loginUser._id,
-            name: loginUser.name,
-            email: loginUser.email,
+            token,
+            _id:    loginUser._id,
+            name:   loginUser.name,
+            email:  loginUser.email,
             avatar: loginUser.avatar,
             createdAt: loginUser.createdAt
         });
@@ -83,8 +87,9 @@ const Login = async(req, res) => {
 const logout = async (req, res) => {
     res.clearCookie('token', {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax'
+        secure: true,
+        sameSite: 'none',
+        path: '/'
     });
     return res.status(200).json({ message: 'logout success' });
 }
@@ -158,8 +163,9 @@ const deleteAccount = async (req, res) => {
         await User.findByIdAndDelete(req.user.id)
         res.clearCookie('token', {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'none'
+            secure: true,
+            sameSite: 'none',
+            path: '/'
         });
         return res.status(200).json({ message: 'Account and associated notes deleted successfully' })
     } catch (error) {
