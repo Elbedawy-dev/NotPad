@@ -7,7 +7,7 @@ const router = express.Router()
 
 router.post('/', protect, addNote)
 router.get('/', protect, getNotes)
-router.put('/:noteId', protect, updateNote)
+router.put('/:noteId', protect, upload.single('image'), updateNote)
 router.delete('/:noteId', protect, deleteNote)
 router.post('/:noteId/image', protect, upload.single('image'), uploadNoteImage)
 router.patch('/:noteId/pin', protect, togglePin)

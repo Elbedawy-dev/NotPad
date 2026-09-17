@@ -241,19 +241,19 @@ const Dashboard = () => {
   </>
   )}
   </main>
-
-    {/* Footer / Status Bar */}
-    <footer className="w-full bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 py-4 px-6 mt-12 transition-colors duration-200">
-      <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-center gap-4 text-xs font-medium text-slate-500 dark:text-slate-400">
-        <span>{t("createdFooter")}</span>
-      </div>
-    </footer>
   </div>
+    {/* Footer / Status Bar */}
+      <footer className="w-full bg-white dark:bg-slate-900 border-t 
+      border-slate-100 dark:border-slate-800 py-4 px-6 mt-12 transition-colors">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center 
+        justify-center gap-4 text-xs font-medium text-slate-500 dark:text-slate-400">
+          <span>{t("createdFooter")}</span>
+        </div>
+      </footer>
 
       <NoteDetailsModal 
         note={selectedNote}
-        onClose={() => setSelectedNote(null)}
-      />
+        onClose={() => setSelectedNote(null)} />
     </div>
   );
 };

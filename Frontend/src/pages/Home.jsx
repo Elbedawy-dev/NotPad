@@ -126,7 +126,8 @@ const Home = () => {
     document.body.removeChild(link);
   };
 
-  // Filter notes by tab (all / pinned / trash), visibility filter (all / public / private), and search query
+  // Filter notes by tab (all / pinned / trash), visibility filter (all / public / private),
+  //  and search query
   const filteredNotes = notes
     .filter((note) => {
       if (activeTab === "pinned") return note.isPinned;
@@ -165,19 +166,20 @@ const Home = () => {
   const storageUsedMB = (totalChars / 1024 / 100).toFixed(1);
 
   return (
-    <div className="min-h-screen bg-[#f8f9fc] dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col justify-between font-sans transition-colors">
+    <div className="min-h-screen bg-[#f8f9fc] dark:bg-slate-950 text-slate-900 
+    dark:text-slate-100 flex flex-col justify-between font-sans transition-colors">
       <div>
         <Navbar
           notesCount={totalCount}
           activeTab={activeTab}
-          onTabChange={setActiveTab}
-        />
+          onTabChange={setActiveTab} />
 
         <main className="max-w-7xl mx-auto px-6 py-8">
           {/* Workspace Header & Title Bar */}
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
             <div>
-              <div className="flex items-center gap-2 text-xs font-semibold text-slate-400 dark:text-slate-500 tracking-wider uppercase mb-1">
+              <div className="flex items-center gap-2 text-xs font-semibold text-slate-400 
+              dark:text-slate-500 tracking-wider uppercase mb-1">
                 <span>{t("workspace")}</span>
                 <span>/</span>
                 <span className="text-slate-600 dark:text-slate-400">
@@ -196,7 +198,8 @@ const Home = () => {
             <div className="flex items-center gap-3">
               <div className="relative flex-1 sm:w-80">
                 <LuSearch
-                  className={`absolute top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 ${lang === "ar" ? "right-3.5" : "left-3.5"}`}
+                  className={`absolute top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500
+                    ${lang === "ar" ? "right-3.5" : "left-3.5"}`}
                   size={17}
                 />
                 <input
@@ -290,16 +293,17 @@ const Home = () => {
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setFilter("all")}
-                className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center gap-2 ${
+                className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer 
+                  flex items-center gap-2 ${
                   filter === "all"
                     ? "bg-slate-950 dark:bg-white text-white dark:text-slate-950 shadow-xs"
                     : "bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200/80 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800"
-                }`}
-              >
+                }`}>
                 <span>{t("allNotes")}</span>
                 <span
-                  className={`text-[10px] px-1.5 py-0.2 rounded-full ${filter === "all" ? "bg-slate-800 dark:bg-slate-200 text-white dark:text-slate-900" : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400"}`}
-                >
+                  className={`text-[10px] px-1.5 py-0.2 rounded-full ${filter === "all" ? 
+                  "bg-slate-800 dark:bg-slate-200 text-white dark:text-slate-900" 
+                  : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400"}`}>
                   {totalCount}
                 </span>
               </button>
@@ -350,8 +354,9 @@ const Home = () => {
             </div>
 
             {/* Right Controls: Sort & Layout Toggle */}
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 
+            <div className="flex items-center gap-3 justify-end">
+              <div className="flex items-center gap-2 text-xs text-slate-500  
+              dark:text-slate-400 
                 font-medium">
                 <span>{t("sort")}</span>
                 <select
@@ -359,8 +364,7 @@ const Home = () => {
                   onChange={(e) => setSortOption(e.target.value)}
                   className="bg-white dark:bg-slate-900 border border-slate-200 
                   dark:border-slate-800 rounded-lg px-2.5 py-1 text-xs font-semibold 
-                  text-slate-800 dark:text-slate-200 focus:outline-none cursor-pointer"
-                >
+                  text-slate-800 dark:text-slate-200 focus:outline-none cursor-pointer">
                   <option value="newest">{t("newestFirst")}</option>
                   <option value="oldest">{t("oldestFirst")}</option>
                   <option value="title">{t("titleAZ")}</option>
@@ -449,8 +453,7 @@ const Home = () => {
                 viewMode === "grid"
                   ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"
                   : "flex flex-col gap-3"
-              }
-            >
+              }>
               <AnimatePresence>
                 {filteredNotes.map((note) => (
                   <NoteCard
@@ -469,8 +472,10 @@ const Home = () => {
       </div>
 
       {/* Footer / Status Bar */}
-      <footer className="w-full bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 py-4 px-6 mt-12 transition-colors">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-center gap-4 text-xs font-medium text-slate-500 dark:text-slate-400">
+      <footer className="w-full bg-white dark:bg-slate-900 border-t border-slate-100 
+      dark:border-slate-800 py-4 px-6 mt-12 transition-colors">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-center 
+        gap-4 text-xs font-medium text-slate-500 dark:text-slate-400">
           <span>{t("createdFooter")}</span>
         </div>
       </footer>

@@ -139,8 +139,7 @@ const NoteCard = ({ note, onDelete, onEdit, onView, viewMode = "grid" }) => {
               ${note.isPublic
                 ? "bg-emerald-50 text-emerald-600 border border-emerald-100"
                 : "bg-slate-100 text-slate-600 border border-slate-200/60"
-            }`}
-          >
+            }`}>
             {note.isPublic ? (
               <>
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>{" "}
@@ -176,8 +175,8 @@ const NoteCard = ({ note, onDelete, onEdit, onView, viewMode = "grid" }) => {
           </div>
         </div>
 
-        <h3 className="font-bold text-slate-100 leading-snug line-clamp-2 mb-2 
-        hover:text-slate-700 transition-colors">
+        <h3 className="font-bold  leading-snug line-clamp-2 mb-2 
+        text-slate-700 dark:text-slate-100  transition-colors">
           {note.title}
         </h3>
         <p className="text-xs text-slate-500 line-clamp-3 mb-5 leading-relaxed font-normal">

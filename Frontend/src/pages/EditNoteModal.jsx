@@ -152,9 +152,9 @@ const EditNoteModal = ({ note, onClose, onNoteUpdated }) => {
               <button
                 type="submit"
                 disabled={submitting}
-                className="bg-slate-950 dark:bg-white dark:text-slate-950 hover:bg-slate-800 
-                dark:hover:bg-slate-100 text-white rounded-xl py-3 font-semibold text-xs mt-2 
-                disabled:opacity-50 transition-colors cursor-pointer"
+                className="bg-slate-950 dark:bg-slate-800 hover:bg-slate-800 
+                dark:hover:bg-slate-700 text-white rounded-xl py-3 font-semibold text-xs 
+                mt-2 disabled:opacity-50 transition-colors cursor-pointer"
               >
                 {submitting ? "Saving..." : "Save Changes"}
               </button>
