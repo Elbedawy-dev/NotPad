@@ -83,7 +83,7 @@ const Register = () => {
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="e.g. Sarah Jenkins"
+                  placeholder="e.g. moaaz Jenkins"
                   className="w-full bg-slate-50 rounded-lg py-2.5 pl-10 pr-4 outline-none border 
                   border-slate-200 focus:border-black focus:bg-white text-slate-800 
                   transition-all text-sm"
@@ -101,7 +101,7 @@ const Register = () => {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="sarah.j@minimal.io"
+                  placeholder="moaaz.j@minimal.io"
                   className="w-full bg-slate-50 rounded-lg py-2.5 pl-10 pr-4 outline-none border 
                   border-slate-200 focus:border-black focus:bg-white text-slate-800 
                   transition-all text-sm"

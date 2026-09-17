@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect, useContext } from "react"
+import { createContext, useState, useEffect, useContext } from "react";
 
 const translations = {
   en: {
@@ -12,12 +12,13 @@ const translations = {
     home: "Home",
     profile: "Profile",
     logout: "Log Out",
-    
+
     // Notes Page
     workspace: "WORKSPACE",
     dashboardSub: "Dashboard",
     myNotes: "My Notes",
-    myNotesSub: "Organize, draft, and publish your personal or shared thoughts.",
+    myNotesSub:
+      "Organize, draft, and publish your personal or shared thoughts.",
     searchPlaceholder: "Search notes by title or body...",
     addNote: "Add Note",
     totalStored: "TOTAL STORED",
@@ -44,6 +45,13 @@ const translations = {
     noNotesFound: "No notes found",
     noNotesSub: "Create your first note above to get started.",
     loadingNotes: "Loading your notes...",
+    createdFooter: "Created By Moaaz Elbedawy 2026 © All rights reserved",
+    createdFooterAr: "صنع على يد معا` البديوي 2026 © جميع الحقوق محفوظة",
+    copyright: "©",
+    rights: "All rights reserved",
+    rightsAr: "جميع الحقوق محفوظة",
+    created: "Created By Moaaz Elbedawy",
+    createdAr: "صنع على يد معاز البدوي",
 
     // Modals & Actions
     newNoteTitle: "New Note",
@@ -80,13 +88,15 @@ const translations = {
     memberSince: "Member since",
     proTier: "Pro Tier",
     dangerZone: "Danger Zone",
-    dangerZoneSub: "Deleting your account is permanent. All notes, assets, and sync logs will be wiped instantly.",
+    dangerZoneSub:
+      "Deleting your account is permanent. All notes, assets, and sync logs will be wiped instantly.",
     deleteAccount: "Delete Account",
     selectAvatar: "Select or Upload Avatar",
     uploadCustomPhoto: "Upload Custom Photo",
     choosePreset: "Or choose a preset avatar:",
     confirmDeleteTitle: "Delete Account Permanently?",
-    confirmDeleteSub: "This action cannot be undone. Your account, profile information, and all saved notes will be permanently erased.",
+    confirmDeleteSub:
+      "This action cannot be undone. Your account, profile information, and all saved notes will be permanently erased.",
     cancel: "Cancel",
     yesDelete: "Yes, Delete Account",
     deleting: "Deleting...",
@@ -170,66 +180,70 @@ const translations = {
     memberSince: "عضو منذ",
     proTier: "الباقة الاحترافية",
     dangerZone: "منطقة الخطر",
-    dangerZoneSub: "حذف حسابك أمر نهائي. سيتم مسح جميع الملاحظات والملفات والسجلات فوراً.",
+    dangerZoneSub:
+      "حذف حسابك أمر نهائي. سيتم مسح جميع الملاحظات والملفات والسجلات فوراً.",
     deleteAccount: "حذف الحساب",
     selectAvatar: "اختر أو ارفع صورة شخصية",
     uploadCustomPhoto: "رفع صورة مخصصة",
     choosePreset: "أو اختر صورة من المجموعات الجاهزة:",
     confirmDeleteTitle: "هل تريد حذف الحساب نهائياً؟",
-    confirmDeleteSub: "لا يمكن التراجع عن هذا الإجراء. سيتم مسح معلومات حسابك وجميع ملاحظاتك المحفوظة نهائياً.",
+    confirmDeleteSub:
+      "لا يمكن التراجع عن هذا الإجراء. سيتم مسح معلومات حسابك وجميع ملاحظاتك المحفوظة نهائياً.",
     cancel: "إلغاء",
     yesDelete: "نعم، احذف الحساب",
     deleting: "جاري الحذف...",
-  }
-}
+  },
+};
 
-export const AppContext = createContext()
+export const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
   // Theme state: 'light' or 'dark'
   const [theme, setTheme] = useState(() => {
-    return localStorage.getItem("notpad_theme") || "light"
-  })
+    return localStorage.getItem("notpad_theme") || "light";
+  });
 
   // Language state: 'en' or 'ar'
   const [lang, setLang] = useState(() => {
-    return localStorage.getItem("notpad_lang") || "en"
-  })
+    return localStorage.getItem("notpad_lang") || "en";
+  });
 
   useEffect(() => {
-    localStorage.setItem("notpad_theme", theme)
-    const root = document.documentElement
+    localStorage.setItem("notpad_theme", theme);
+    const root = document.documentElement;
     if (theme === "dark") {
-      root.classList.add("dark")
+      root.classList.add("dark");
     } else {
-      root.classList.remove("dark")
+      root.classList.remove("dark");
     }
-  }, [theme])
+  }, [theme]);
 
   useEffect(() => {
-    localStorage.setItem("notpad_lang", lang)
-    const root = document.documentElement
-    root.setAttribute("lang", lang)
-    root.setAttribute("dir", lang === "ar" ? "rtl" : "ltr")
-  }, [lang])
+    localStorage.setItem("notpad_lang", lang);
+    const root = document.documentElement;
+    root.setAttribute("lang", lang);
+    root.setAttribute("dir", lang === "ar" ? "rtl" : "ltr");
+  }, [lang]);
 
   const toggleTheme = () => {
-    setTheme((prev) => (prev === "light" ? "dark" : "light"))
-  }
+    setTheme((prev) => (prev === "light" ? "dark" : "light"));
+  };
 
   const toggleLang = () => {
-    setLang((prev) => (prev === "en" ? "ar" : "en"))
-  }
+    setLang((prev) => (prev === "en" ? "ar" : "en"));
+  };
 
   const t = (key) => {
-    return translations[lang]?.[key] || translations.en?.[key] || key
-  }
+    return translations[lang]?.[key] || translations.en?.[key] || key;
+  };
 
   return (
-    <AppContext.Provider value={{ theme, setTheme, toggleTheme, lang, setLang, toggleLang, t }}>
+    <AppContext.Provider
+      value={{ theme, setTheme, toggleTheme, lang, setLang, toggleLang, t }}
+    >
       {children}
     </AppContext.Provider>
-  )
-}
+  );
+};
 
-export const useApp = () => useContext(AppContext)
+export const useApp = () => useContext(AppContext);
