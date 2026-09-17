@@ -354,7 +354,7 @@ const Home = () => {
             </div>
 
             {/* Right Controls: Sort & Layout Toggle */}
-            <div className="flex items-center gap-3 justify-end">
+            <div className="flex items-center gap-3">
               <div className="flex items-center gap-2 text-xs text-slate-500  
               dark:text-slate-400 
                 font-medium">
@@ -371,7 +371,7 @@ const Home = () => {
                 </select>
               </div>
 
-              <span className="h-4 w-[1px] bg-slate-200 dark:bg-slate-800"></span>
+              <span className="h-4 w-px bg-slate-200 dark:bg-slate-800"></span>
 
               <div className="flex items-center bg-white dark:bg-slate-900 border 
               border-slate-200 dark:border-slate-800 rounded-lg p-0.5">

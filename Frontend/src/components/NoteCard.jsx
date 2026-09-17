@@ -7,8 +7,10 @@ import {
   LuLock,
   LuImage,
 } from "react-icons/lu";
+import { useApp } from "../context/AppContext";
 
 const NoteCard = ({ note, onDelete, onEdit, onView, viewMode = "grid" }) => {
+  const { t } = useApp();
   const wordCount = note.body
     ? note.body.trim().split(/\s+/).filter(Boolean).length
     : 0;
@@ -63,17 +65,16 @@ const NoteCard = ({ note, onDelete, onEdit, onView, viewMode = "grid" }) => {
             {note.isPublic ? (
               <>
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>{" "}
-                Public
-              </>
+              {t("publicTag")}              </>
             ) : (
               <>
-                <LuLock size={12} /> Private
+                <LuLock size={12} /> {t("privateTag")} 
               </>
             )}
           </span>
           <div>
-            <h3 className="font-bold text-slate-900 text-sm hover:text-slate-700 
-            transition-colors">
+            <h3 className="font-bold text-slate-900 dark:text-slate-100 text-sm 
+              hover:text-slate-700 dark:hover:text-slate-300 transition-colors">
               {note.title}
             </h3>
             <p className="text-xs text-slate-400 line-clamp-1">{note.body}</p>
@@ -95,8 +96,8 @@ const NoteCard = ({ note, onDelete, onEdit, onView, viewMode = "grid" }) => {
             <span>{wordCount} words</span>
           </div>
 
-          <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 
-              transition-opacity">
+          <div className="flex items-center gap-2 opacity-100 sm:opacity-0 
+            sm:group-hover:opacity-100 transition-opacity">
             <button onClick={(e) => { e.stopPropagation(); onEdit(note);
               }}
               className="p-1.5 text-slate-400 hover:text-slate-800 hover:bg-slate-100 
@@ -143,11 +144,11 @@ const NoteCard = ({ note, onDelete, onEdit, onView, viewMode = "grid" }) => {
             {note.isPublic ? (
               <>
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>{" "}
-                Public
+                {t("publicTag")}
               </>
             ) : (
               <>
-                <LuLock size={12} /> Private
+                <LuLock size={12} /> {t("privateTag")}
               </>
             )}
           </span>

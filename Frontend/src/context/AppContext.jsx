@@ -46,12 +46,11 @@ const translations = {
     noNotesSub: "Create your first note above to get started.",
     loadingNotes: "Loading your notes...",
     createdFooter: "Created By Moaaz Elbedawy 2026 © All rights reserved",
-    createdFooterAr: "صنع على يد معا` البديوي 2026 © جميع الحقوق محفوظة",
     copyright: "©",
     rights: "All rights reserved",
     rightsAr: "جميع الحقوق محفوظة",
     created: "Created By Moaaz Elbedawy",
-    createdAr: "صنع على يد معاز البدوي",
+    createdAr: "صنع على يد معاز البديوي",
 
     // Modals & Actions
     newNoteTitle: "New Note",
@@ -168,7 +167,7 @@ const translations = {
     latestEntriesSub: "أحدث مدوناتك ومسوداتك",
     viewAllNotes: "عرض جميع الملاحظات",
     encrypted: "مشفرة",
-    active: "نشطة",
+    Puplic: "عامه",
 
     // Profile Settings
     settingsAccount: "الإعدادات / الحساب",
@@ -192,6 +191,7 @@ const translations = {
     cancel: "إلغاء",
     yesDelete: "نعم، احذف الحساب",
     deleting: "جاري الحذف...",
+    createdFooter: "صنع بواسطة معاذ البديوي 2026 © جميع الحقوق محفوظة",
   },
 };
 

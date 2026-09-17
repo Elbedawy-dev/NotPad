@@ -20,9 +20,9 @@ const NoteDetailsModal = ({ note, onClose }) => {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
             onClick={(e) => e.stopPropagation()}
-            className="bg-white dark:bg-slate-900 rounded-3xl p-6 w-full max-w-lg max-h-[85vh] overflow-y-auto border border-slate-100 dark:border-slate-800 shadow-xl"
-          >
-            <div className="flex justify-between items-center mb-4">
+            className="bg-white dark:bg-slate-900 rounded-3xl w-full max-w-lg max-h-[85vh] 
+            overflow-hidden border border-slate-100 dark:border-slate-800 shadow-xl flex flex-col">
+            <div className="flex justify-between items-center px-6 pt-6 pb-4 shrink-0">
               <span
                 className={`px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1.5 ${
                   note.isPublic
@@ -45,19 +45,20 @@ const NoteDetailsModal = ({ note, onClose }) => {
                 <LuX size={20} />
               </button>
             </div>
+            <div className="overflow-y-auto px-6 pb-6">
+              {note.image && (
+                <div className="mb-4 rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-950">
+                  <img src={note.image} alt={note.title} className="w-full max-h-72 object-cover" />
+                </div>
+              )}
 
-            {note.image && (
-              <div className="mb-4 rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-950">
-                <img src={note.image} alt={note.title} className="w-full max-h-72 object-cover" />
+              <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-3">{note.title}</h2>
+              <p className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed whitespace-pre-wrap mb-6">{note.body}</p>
+
+              <div className="flex items-center gap-1.5 text-xs text-slate-400 dark:text-slate-500 border-t border-slate-100 dark:border-slate-800 pt-4 font-medium">
+                <LuCalendar size={14} />
+                <span>{new Date(note.createdAt).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}</span>
               </div>
-            )}
-
-            <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-3">{note.title}</h2>
-            <p className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed whitespace-pre-wrap mb-6">{note.body}</p>
-
-            <div className="flex items-center gap-1.5 text-xs text-slate-400 dark:text-slate-500 border-t border-slate-100 dark:border-slate-800 pt-4 font-medium">
-              <LuCalendar size={14} />
-              <span>{new Date(note.createdAt).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}</span>
             </div>
           </motion.div>
         </motion.div>
@@ -66,4 +67,4 @@ const NoteDetailsModal = ({ note, onClose }) => {
   )
 }
 
-export default NoteDetailsModal
+export default NoteDetailsModal
