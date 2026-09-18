@@ -72,8 +72,8 @@ const NoteCard = ({ note, onDelete, onEdit, onView, viewMode = "grid" }) => {
             )}
           </span>
           <div className="min-w-0 flex-1">            
-            <h3 className="font-bold text-slate-900 text-sm hover:text-slate-700 
-              transition-colors truncate">
+          <h3 className="font-bold text-slate-900 dark:text-slate-100 text-sm 
+          group-hover:text-slate-700 dark:group-hover:text-slate-300 transition-colors">
               {note.title}
             </h3>
             <p className="text-xs text-slate-400 line-clamp-1">{note.body}</p>
@@ -124,7 +124,7 @@ const NoteCard = ({ note, onDelete, onEdit, onView, viewMode = "grid" }) => {
       justify-between h-full overflow-hidden">
       <div>
         {note.image && (
-          <div className="-mx-5 -mt-5 mb-4 overflow-hidden border-b border-slate-100">
+          <div className="-mx-5 -mt-5 mb-4 overflow-hidden">
             
           <img src={note.image}
             alt={note.title}
