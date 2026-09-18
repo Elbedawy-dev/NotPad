@@ -293,7 +293,7 @@ return (
           {/* Left Filter Pills */}
           <div className="flex items-center gap-1.5 flex-nowrap overflow-x-auto no-scrollbar">                           
             <button onClick={() => setFilter("all")}
-              className={`${lang === "en" ? "px-3 py-1 gap-1 text-[11px]" : "px-2.5 py-1.25 gap-2 text-xs"} 
+              className={`${lang === "en" ? "px-3 py-1.5 gap-1 text-[12px]" : "px-3 py-1.5 gap-2 text-xs"} 
                   rounded-full font-bold transition-all cursor-pointer shrink-0 whitespace-nowrap
                   flex items-center ${
                 filter === "all"
@@ -311,8 +311,8 @@ return (
 
             <button
               onClick={() => setFilter("public")}
-              className={`${lang === "en" ? "px-3 py-1 gap-1 text-[11px]" 
-                : "px-2.5 py-1.25 gap-2 text-xs"} 
+              className={`${lang === "en" ? "px-3 py-1.5 gap-1 text-[12px]" 
+                : "px-3 py-1.5 gap-2 text-xs"} 
                 rounded-full font-bold transition-all cursor-pointer shrink-0 whitespace-nowrap 
                 flex items-center ${
                 filter === "public"
@@ -333,7 +333,7 @@ return (
             <button
               onClick={() => setFilter("private")}
               className={`
-                ${lang === "en" ? "px-3 py-1 gap-1 text-[11px]" : "px-2.5 py-1.25 gap-2 text-xs"} 
+                ${lang === "en" ? "px-3 py-1.5 gap-1 text-[12px]" : "px-3 py-1.5 gap-2 text-xs"} 
                     rounded-full font-bold transition-all cursor-pointer shrink-0 whitespace-nowrap 
                     flex items-center ${filter === "private"                 
                   ? "bg-slate-950 dark:bg-white text-white dark:text-slate-950 shadow-xs" 
