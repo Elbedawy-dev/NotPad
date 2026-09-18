@@ -45,8 +45,7 @@ const NoteCard = ({ note, onDelete, onEdit, onView, viewMode = "grid" }) => {
           transition-all group cursor-pointer flex flex-col md:flex-row md:items-center
           justify-between gap-4">
 
-        <div className="flex items-start md:items-center gap-3.5 flex-1">
-          {note.image && (
+          <div className="flex items-start md:items-center gap-3.5 flex-1 min-w-0">          {note.image && (
             <img
               src={note.image}
               alt={note.title}
@@ -72,9 +71,9 @@ const NoteCard = ({ note, onDelete, onEdit, onView, viewMode = "grid" }) => {
               </>
             )}
           </span>
-          <div>
-            <h3 className="font-bold text-slate-900 dark:text-slate-100 text-sm 
-              hover:text-slate-700 dark:hover:text-slate-300 transition-colors">
+          <div className="min-w-0 flex-1">            
+            <h3 className="font-bold text-slate-900 text-sm hover:text-slate-700 
+              transition-colors truncate">
               {note.title}
             </h3>
             <p className="text-xs text-slate-400 line-clamp-1">{note.body}</p>

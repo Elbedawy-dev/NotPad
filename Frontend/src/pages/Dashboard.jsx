@@ -9,7 +9,8 @@ import {
   LuGlobe,
   LuLock,
   LuCalendar,
-  LuChevronRight,
+  LuChevronRight, 
+  LuChevronLeft,
 } from "react-icons/lu";
 
 const Dashboard = () => {
@@ -17,8 +18,8 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [selectedNote, setSelectedNote] = useState(null);
   const navigate = useNavigate();
-  const { t } = useApp();
-
+  const { t, lang } = useApp();
+  
   useEffect(() => {
     const fetchNotes = async () => {
       try {
@@ -180,15 +181,20 @@ const Dashboard = () => {
           </div>
           <button
             onClick={() => navigate("/")}
-            className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white flex items-center gap-1 transition-colors cursor-pointer"
+            className="text-xs font-semibold text-slate-700 dark:text-slate-300 
+            hover:text-slate-950 dark:hover:text-white flex items-center gap-1 
+            transition-colors cursor-pointer"
           >
             <span>{t("viewAllNotes")}</span>
-            <LuChevronRight size={14} />
+
+          {lang === "ar" ? <LuChevronLeft size={14} /> : <LuChevronRight size={14} />}            
           </button>
         </div>
 
     {/* List Container */}
-    <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-xs divide-y divide-slate-100 dark:divide-slate-800 overflow-hidden">
+    <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 
+    dark:border-slate-800 shadow-xs divide-y divide-slate-100 dark:divide-slate-800 
+    overflow-hidden">
       {recentNotes.length === 0 ? (
         <p className="p-6 text-xs text-slate-400 dark:text-slate-500 text-center">
           {t("noNotesFound")}
@@ -198,13 +204,16 @@ const Dashboard = () => {
           <div
             key={note._id}
             onClick={() => setSelectedNote(note)}
-            className="p-4 px-6 hover:bg-slate-50/80 dark:hover:bg-slate-800/60 transition-colors cursor-pointer flex items-center justify-between group"
+            className="p-4 px-6 hover:bg-slate-50/80 dark:hover:bg-slate-800/60 transition-colors 
+            cursor-pointer flex items-center justify-between group"
           >
-          <div className="space-y-1">
-            <div className="flex items-center gap-2.5">
+          <div className="space-y-1 min-w-0 flex-1">            
+            <div className="flex items-center gap-2.5 min-w-0">
               <span className="w-1.5 h-1.5 rounded-full bg-slate-900 dark:bg-slate-100"></span>
-              <span className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-slate-700 dark:group-hover:text-slate-200 transition-colors">
-                {note.title}
+              <span className="text-sm font-bold text-slate-900 dark:text-white 
+              group-hover:text-slate-700 dark:group-hover:text-slate-200 transition-colors 
+                truncate">
+              {note.title}
               </span>
               <span
                 className={`px-2 py-0.2 rounded-full text-[10px] font-semibold ${
@@ -227,11 +236,17 @@ const Dashboard = () => {
             <span className="text-xs text-slate-400 dark:text-slate-500 font-medium">
               {formatDate(note.createdAt)}
             </span>
+          {lang === "ar" ? (
+            <LuChevronLeft
+              size={16}
+              className="text-slate-300 dark:text-slate-600 group-hover:text-slate-600 
+              dark:group-hover:text-slate-300 transition-colors" />
+          ) : (
             <LuChevronRight
               size={16}
               className="text-slate-300 dark:text-slate-600 group-hover:text-slate-600 
-              dark:group-hover:text-slate-300 transition-colors"
-            />
+              dark:group-hover:text-slate-300 transition-colors" />
+          )}
           </div>
           </div>
         ))

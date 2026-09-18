@@ -28,8 +28,9 @@ const Home = () => {
   const [quickDraft, setQuickDraft] = useState("");
   const [quickDrafting, setQuickDrafting] = useState(false);
   const [sortOption, setSortOption] = useState("newest"); // newest, oldest, title
-  const [viewMode, setViewMode] = useState("grid"); // grid, list
-
+  const [viewMode, setViewMode] = useState(
+    () => localStorage.getItem("notepad_viewMode") || "grid"
+  );
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedNote, setSelectedNote] = useState(null);
   const [editingNote, setEditingNote] = useState(null);
@@ -208,7 +209,8 @@ const Home = () => {
                   placeholder={t("searchPlaceholder")}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className={`w-full ${lang === "ar" ? "pr-10 pl-12" : "pl-10 pr-12"} py-2.5 
+
+                  className={`w-full ${lang === "ar" ? "pr-10 pl-4" : "pl-10 pr-4"} py-2.5                  
                    bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 
                      rounded-xl text-xs font-medium text-slate-800 dark:text-slate-100
                    placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none
@@ -220,8 +222,7 @@ const Home = () => {
                 onClick={() => setIsModalOpen(true)}
                 className="bg-slate-950 dark:bg-white dark:text-slate-950 hover:bg-slate-800 
                 dark:hover:bg-slate-100 text-white rounded-xl px-4 py-2.5 flex items-center gap-2 
-                text-xs font-semibold shadow-xs transition-all cursor-pointer shrink-0"
-              >
+                text-xs font-semibold shadow-xs transition-all cursor-pointer shrink-0">
                 <LuPlus size={16} />
                 <span>{t("addNote")}</span>
               </button>
@@ -290,11 +291,11 @@ const Home = () => {
           {/* Filter Bar & Controls (Image 2) */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
             {/* Left Filter Pills */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               <button
                 onClick={() => setFilter("all")}
                 className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer 
-                  flex items-center gap-2 ${
+                  flex items-center gap-2 whitespace-nowrap ${
                   filter === "all"
                     ? "bg-slate-950 dark:bg-white text-white dark:text-slate-950 shadow-xs"
                     : "bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200/80 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800"
@@ -310,7 +311,8 @@ const Home = () => {
 
               <button
                 onClick={() => setFilter("public")}
-                className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center gap-2 ${
+                className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer 
+                  flex items-center gap-2 whitespace-nowrap ${
                   filter === "public"
                     ? "bg-slate-950 dark:bg-white text-white dark:text-slate-950 shadow-xs"
                     : "bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200/80 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800"
@@ -323,13 +325,12 @@ const Home = () => {
                 >
                   {publicCount}
                 </span>
-              </button>
+              </button> 
 
               <button
                 onClick={() => setFilter("private")}
                 className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer 
-                  flex items-center gap-2 ${  filter === "private"
-                 
+                  flex items-center gap-2 whitespace-nowrap ${  filter === "private"                 
                     ? "bg-slate-950 dark:bg-white text-white dark:text-slate-950 shadow-xs" 
                     : "bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200/80 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800"
                 }`}
@@ -376,7 +377,10 @@ const Home = () => {
               <div className="flex items-center bg-white dark:bg-slate-900 border 
               border-slate-200 dark:border-slate-800 rounded-lg p-0.5">
                 <button
-                  onClick={() => setViewMode("grid")}
+                  onClick={() => {
+                    setViewMode("grid");
+                    localStorage.setItem("notepad_viewMode", "grid");
+                  }}
                   title="Grid View"
                   className={`p-1.5 rounded-md transition-colors cursor-pointer ${
                     viewMode === "grid"
@@ -387,7 +391,10 @@ const Home = () => {
                   <LuLayoutGrid size={15} />
                 </button>
                 <button
-                  onClick={() => setViewMode("list")}
+                  onClick={() => {
+                    setViewMode("list");
+                    localStorage.setItem("notepad_viewMode", "list");
+                  }}
                   title="List View"
                   className={`p-1.5 rounded-md transition-colors cursor-pointer ${
                     viewMode === "list"

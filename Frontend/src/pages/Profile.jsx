@@ -18,16 +18,16 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 
 const AVATARS = [
-  "/avatars/1.png",
-  "/avatars/2.png",
-  "/avatars/3.png",
-  "/avatars/4.png",
-  "/avatars/5.png",
-  "/avatars/6.png",
-  "/avatars/7.png",
-  "/avatars/8.png",
-  "/avatars/9.png",
-  "/avatars/10.png",
+  "https://api.dicebear.com/9.x/adventurer/svg?seed=Felix",
+  "https://api.dicebear.com/9.x/adventurer/svg?seed=Aneka",
+  "https://api.dicebear.com/9.x/adventurer/svg?seed=Milo",
+  "https://api.dicebear.com/9.x/adventurer/svg?seed=Zoe",
+  "https://api.dicebear.com/9.x/adventurer/svg?seed=Leo",
+  "https://api.dicebear.com/9.x/adventurer/svg?seed=Nina",
+  "https://api.dicebear.com/9.x/adventurer/svg?seed=Omar",
+  "https://api.dicebear.com/9.x/adventurer/svg?seed=Sara",
+  "https://api.dicebear.com/9.x/adventurer/svg?seed=Kai",
+  "https://api.dicebear.com/9.x/adventurer/svg?seed=Lina",
 ];
 
 const Profile = () => {
